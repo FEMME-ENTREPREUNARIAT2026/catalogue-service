@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Categorie {
+  id          String       @id @default(uuid())
+  slug        String       @unique
+  nom         String
+  description String?
+  image       String?
+  icon        String?
+  boutiques   Boutique[]
+  prestations Prestation[]
+}
+
+model Boutique {
+  id              String       @id @default(uuid())
+  prestataireId   String
+  categorieId     String
+  categorie       Categorie    @relation(fields: [categorieId], references: [id])
+  nom             String
+  bio             String?
+  ville           String
+  adresse         String?
+  quartier        String?
+  avatar          String?
+  photoCouverture String?
+  tarifMin        Float?
+  badge           String?
+  disponible      Boolean      @default(true)
+  photos          String[]
+  noteMoyenne     Float?
+  createdAt       DateTime     @default(now())
+  prestations     Prestation[]
+}
+
+model Prestation {
+  id               String    @id @default(uuid())
+  titre            String
+  description      String?
+  photos           String[]
+  prix             Float
+  duree            String?
+  caracteristiques Json?
+  disponible       Boolean   @default(true)
+  vues             Int       @default(0)
+  boutiqueId       String
+  boutique         Boutique  @relation(fields: [boutiqueId], references: [id])
+  categorieId      String
+  categorie        Categorie @relation(fields: [categorieId], references: [id])
+  createdAt        DateTime  @default(now())
+}
+
+model Evenement {
+  id             String   @id @default(uuid())
+  titre          String
+  description    String?
+  date           DateTime
+  heure          String?
+  lieu           String
+  prix           String?
+  capacite       Int?
+  inscrits       Int      @default(0)
+  image          String?
+  organisateurId String
+  tags           String[]
+  createdAt      DateTime @default(now())
+}
