@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getBoutiques, getBoutiqueById, creerBoutique, modifierBoutique, ajouterPhotosBoutique, mettreAJourAvatar, mettreAJourCouverture } = require('../controllers/boutiqueController');
+const { getBoutiques, getBoutiqueById, creerBoutique, modifierBoutique, ajouterPhotosBoutique, mettreAJourAvatar, mettreAJourCouverture, mettreAJourNoteMoyenne } = require('../controllers/boutiqueController');
 const { verifyPrestataire } = require('../middlewares/authMiddleware');
 const { upload } = require('../utils/cloudinary');
 
@@ -11,5 +11,6 @@ router.put('/:id', verifyPrestataire, modifierBoutique);
 router.post('/:id/photos', verifyPrestataire, upload.array('photos', 5), ajouterPhotosBoutique);
 router.post('/:id/avatar', verifyPrestataire, upload.single('avatar'), mettreAJourAvatar);
 router.post('/:id/couverture', verifyPrestataire, upload.single('couverture'), mettreAJourCouverture);
+router.patch('/:id/note-moyenne', mettreAJourNoteMoyenne);
 
 module.exports = router;

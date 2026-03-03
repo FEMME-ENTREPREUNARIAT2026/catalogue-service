@@ -237,4 +237,24 @@ const mettreAJourCouverture = async (req, res) => {
   }
 };
 
-module.exports = { getBoutiques, getBoutiqueById, creerBoutique, modifierBoutique, ajouterPhotosBoutique, mettreAJourAvatar, mettreAJourCouverture };
+// Route interne : mise à jour de la note moyenne (appelée par booking-service)
+const mettreAJourNoteMoyenne = async (req, res) => {
+  const { noteMoyenne } = req.body;
+
+  if (noteMoyenne === undefined || noteMoyenne === null) {
+    return res.status(400).json({ message: 'noteMoyenne est obligatoire' });
+  }
+
+  try {
+    const boutique = await prisma.boutique.update({
+      where: { id: req.params.id },
+      data: { noteMoyenne: parseFloat(noteMoyenne) },
+    });
+    res.json(boutique);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
+
+module.exports = { getBoutiques, getBoutiqueById, creerBoutique, modifierBoutique, ajouterPhotosBoutique, mettreAJourAvatar, mettreAJourCouverture, mettreAJourNoteMoyenne };
